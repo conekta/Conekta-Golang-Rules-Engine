@@ -342,7 +342,10 @@ func (j *JsonQueryVisitorImpl) VisitSubListOfAttrPaths(ctx *SubListOfAttrPathsCo
 	if j.leftOp == nil {
 		j.leftOp = make([]float64, 0)
 	}
-	list := j.leftOp.([]float64)
+	list, ok := j.leftOp.([]float64)
+	if !ok {
+		j.leftOp = make([]float64, 0)
+	}
 	for _, attribute := range strings.Split(ctx.GetText(), ",") {
 
 		if strings.Contains(attribute, ".") {
