@@ -92,6 +92,25 @@ func TestSubtractUnSuccessfully(t *testing.T) {
 	})
 }
 
+func TestDiv(t *testing.T) {
+	t.Run("when division works successfully", func(t *testing.T) {
+		res, err := Evaluate(`DIV (x,y) EQ 10`, map[string]interface{}{
+			"x": 100,
+			"y": 10,
+		})
+		require.NoError(t, err)
+		require.True(t, res)
+	})
+	t.Run("when dividing by 0 should return 0", func(t *testing.T) {
+		res, err := Evaluate(`DIV (x,y) EQ 0`, map[string]interface{}{
+			"x": 100,
+			"y": 0,
+		})
+		require.NoError(t, err)
+		require.True(t, res)
+	})
+}
+
 func TestCombiningMultipleOperators(t *testing.T) {
 	t.Run("using 3 rules", func(t *testing.T) {
 		res, err := Evaluate(`SUBTRACT (x,y) EQ 1 and SUBTRACT (x,y) EQ 1 and MLP (y,a) > 24`, map[string]interface{}{
