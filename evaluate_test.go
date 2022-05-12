@@ -91,3 +91,24 @@ func TestSubtractUnSuccessfully(t *testing.T) {
 		require.False(t, res)
 	})
 }
+
+func TestCombiningMultipleOperators(t *testing.T) {
+	t.Run("using 3 rules", func(t *testing.T) {
+		res, err := Evaluate(`SUBTRACT (x,y) EQ 1 and SUBTRACT (x,y) EQ 1 and MLP (y,a) > 24`, map[string]interface{}{
+			"x": 8,
+			"y": 7,
+			"a": 5,
+		})
+		require.NoError(t, err)
+		require.True(t, res)
+	})
+	t.Run("using 5 rules", func(t *testing.T) {
+		res, err := Evaluate(`x eq 8 and SUBTRACT (x,y) EQ 1 and SUBTRACT (x,y) EQ 1 and MLP (y,a) > 24 and MLP (y,a) eq 35`, map[string]interface{}{
+			"x": 8,
+			"y": 7,
+			"a": 5,
+		})
+		require.NoError(t, err)
+		require.True(t, res)
+	})
+}
