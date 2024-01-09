@@ -1,8 +1,8 @@
-// Code generated from JsonQuery.g4 by ANTLR 4.7.2. DO NOT EDIT.
+// Code generated from JsonQuery.g4 by ANTLR 4.13.1. DO NOT EDIT.
 
 package parser // JsonQuery
 
-import "github.com/antlr/antlr4/runtime/Go/antlr"
+import "github.com/antlr4-go/antlr/v4"
 
 // A complete Visitor for a parse tree produced by JsonQueryParser.
 type JsonQueryVisitor interface {
@@ -10,9 +10,6 @@ type JsonQueryVisitor interface {
 
 	// Visit a parse tree produced by JsonQueryParser#compareExp.
 	VisitCompareExp(ctx *CompareExpContext) interface{}
-
-	// Visit a parse tree produced by JsonQueryParser#mulSumExp.
-	VisitMulSumExp(ctx *MulSumExpContext) interface{}
 
 	// Visit a parse tree produced by JsonQueryParser#parenExp.
 	VisitParenExp(ctx *ParenExpContext) interface{}
@@ -67,12 +64,6 @@ type JsonQueryVisitor interface {
 
 	// Visit a parse tree produced by JsonQueryParser#subListOfDoubles.
 	VisitSubListOfDoubles(ctx *SubListOfDoublesContext) interface{}
-
-	// Visit a parse tree produced by JsonQueryParser#listAttrPaths.
-	VisitListAttrPaths(ctx *ListAttrPathsContext) interface{}
-
-	// Visit a parse tree produced by JsonQueryParser#subListOfAttrPaths.
-	VisitSubListOfAttrPaths(ctx *SubListOfAttrPathsContext) interface{}
 
 	// Visit a parse tree produced by JsonQueryParser#listInts.
 	VisitListInts(ctx *ListIntsContext) interface{}
