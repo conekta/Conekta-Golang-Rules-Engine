@@ -2,6 +2,7 @@ package parser
 
 import (
 	"fmt"
+	"runtime/debug"
 
 	"github.com/antlr4-go/antlr/v4"
 )
@@ -19,9 +20,8 @@ func NewEvaluator(rule string) (ret *Evaluator, retErr error) {
 	// antlr lib has panics for exceptions so we have to put a recover here
 	// in the unlikely case there is an exception
 	defer func() {
-		info := recover()
-		if info != nil {
-			retErr = fmt.Errorf("%q", info)
+		if r := recover(); r != nil {
+			retErr = fmt.Errorf("stacktrace from panic: \n" + string(debug.Stack()))
 		}
 	}()
 	input := antlr.NewInputStream(rule)
@@ -53,9 +53,8 @@ func (e *Evaluator) Process(items map[string]interface{}) (ret bool, retErr erro
 	// antlr lib has panics for exceptions so we have to put a recover here
 	// in the unlikely case there is an exception
 	defer func() {
-		info := recover()
-		if info != nil {
-			retErr = fmt.Errorf("%q", info)
+		if r := recover(); r != nil {
+			retErr = fmt.Errorf("stacktrace from panic: \n" + string(debug.Stack()))
 			ret = false
 		}
 	}()

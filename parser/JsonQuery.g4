@@ -69,10 +69,15 @@ value
    | VERSION           #version
    | STRING            #string
    | DOUBLE            #double
+   | DATETIME          #datetime
    | '-'? INT EXP?     #long
    | listInts          #listOfInts
    | listDoubles       #listOfDoubles
    | listStrings       #listOfStrings
+   ;
+
+DATETIME
+   : DIGIT DIGIT DIGIT DIGIT  '-' DIGIT DIGIT  '-' DIGIT DIGIT 'T' DIGIT DIGIT ':' DIGIT DIGIT
    ;
 
 VERSION

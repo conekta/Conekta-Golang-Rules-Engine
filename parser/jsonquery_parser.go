@@ -35,13 +35,13 @@ func jsonqueryParserInit() {
 	staticData.LiteralNames = []string{
 		"", "'('", "')'", "'pr'", "'.'", "'-'", "'['", "']'", "", "", "", "'null'",
 		"", "", "", "", "", "", "", "", "", "", "'MLP'", "'SUM'", "'SUBTRACT'",
-		"'DIV'", "", "", "", "", "", "", "'\\n'",
+		"'DIV'", "", "", "", "", "", "", "", "'\\n'",
 	}
 	staticData.SymbolicNames = []string{
 		"", "", "", "", "", "", "", "", "NOT", "LOGICAL_OPERATOR", "BOOLEAN",
 		"NULL", "IN", "EQ", "NE", "GT", "LT", "GE", "LE", "CO", "SW", "EW",
-		"ASTERISK", "PLUS", "MINUS", "DIVISON", "ATTRNAME", "VERSION", "STRING",
-		"DOUBLE", "INT", "EXP", "NEWLINE", "COMMA", "SP",
+		"ASTERISK", "PLUS", "MINUS", "DIVISON", "ATTRNAME", "DATETIME", "VERSION",
+		"STRING", "DOUBLE", "INT", "EXP", "NEWLINE", "COMMA", "SP",
 	}
 	staticData.RuleNames = []string{
 		"query", "attrPath", "subAttr", "value", "listStrings", "subListOfStrings",
@@ -50,64 +50,65 @@ func jsonqueryParserInit() {
 	}
 	staticData.PredictionContextCache = antlr.NewPredictionContextCache()
 	staticData.serializedATN = []int32{
-		4, 1, 34, 137, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
+		4, 1, 35, 138, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
 		4, 2, 5, 7, 5, 2, 6, 7, 6, 2, 7, 7, 7, 2, 8, 7, 8, 2, 9, 7, 9, 2, 10, 7,
 		10, 2, 11, 7, 11, 1, 0, 1, 0, 3, 0, 27, 8, 0, 1, 0, 3, 0, 30, 8, 0, 1,
 		0, 1, 0, 3, 0, 34, 8, 0, 1, 0, 1, 0, 3, 0, 38, 8, 0, 1, 0, 1, 0, 1, 0,
 		1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0,
 		1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 3, 0, 62, 8, 0, 1, 0, 1, 0, 1,
 		0, 1, 0, 1, 0, 5, 0, 69, 8, 0, 10, 0, 12, 0, 72, 9, 0, 1, 1, 1, 1, 3, 1,
-		76, 8, 1, 1, 2, 1, 2, 1, 2, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 3, 3, 87,
-		8, 3, 1, 3, 1, 3, 3, 3, 91, 8, 3, 1, 3, 1, 3, 1, 3, 3, 3, 96, 8, 3, 1,
-		4, 1, 4, 1, 4, 1, 5, 1, 5, 1, 5, 1, 5, 1, 5, 3, 5, 106, 8, 5, 1, 6, 1,
-		6, 1, 6, 1, 7, 1, 7, 1, 7, 1, 7, 1, 7, 3, 7, 116, 8, 7, 1, 8, 1, 8, 1,
-		9, 1, 9, 1, 9, 1, 9, 1, 9, 3, 9, 125, 8, 9, 1, 10, 1, 10, 1, 10, 1, 11,
-		1, 11, 1, 11, 1, 11, 1, 11, 3, 11, 135, 8, 11, 1, 11, 0, 1, 0, 12, 0, 2,
-		4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 0, 3, 1, 0, 12, 21, 1, 0, 22, 25,
-		1, 0, 13, 18, 147, 0, 61, 1, 0, 0, 0, 2, 73, 1, 0, 0, 0, 4, 77, 1, 0, 0,
-		0, 6, 95, 1, 0, 0, 0, 8, 97, 1, 0, 0, 0, 10, 105, 1, 0, 0, 0, 12, 107,
-		1, 0, 0, 0, 14, 115, 1, 0, 0, 0, 16, 117, 1, 0, 0, 0, 18, 124, 1, 0, 0,
-		0, 20, 126, 1, 0, 0, 0, 22, 134, 1, 0, 0, 0, 24, 26, 6, 0, -1, 0, 25, 27,
-		5, 8, 0, 0, 26, 25, 1, 0, 0, 0, 26, 27, 1, 0, 0, 0, 27, 29, 1, 0, 0, 0,
-		28, 30, 5, 34, 0, 0, 29, 28, 1, 0, 0, 0, 29, 30, 1, 0, 0, 0, 30, 31, 1,
-		0, 0, 0, 31, 33, 5, 1, 0, 0, 32, 34, 5, 34, 0, 0, 33, 32, 1, 0, 0, 0, 33,
-		34, 1, 0, 0, 0, 34, 35, 1, 0, 0, 0, 35, 37, 3, 0, 0, 0, 36, 38, 5, 34,
-		0, 0, 37, 36, 1, 0, 0, 0, 37, 38, 1, 0, 0, 0, 38, 39, 1, 0, 0, 0, 39, 40,
-		5, 2, 0, 0, 40, 62, 1, 0, 0, 0, 41, 42, 3, 2, 1, 0, 42, 43, 5, 34, 0, 0,
-		43, 44, 5, 3, 0, 0, 44, 62, 1, 0, 0, 0, 45, 46, 3, 2, 1, 0, 46, 47, 5,
-		34, 0, 0, 47, 48, 7, 0, 0, 0, 48, 49, 5, 34, 0, 0, 49, 50, 3, 6, 3, 0,
-		50, 62, 1, 0, 0, 0, 51, 52, 7, 1, 0, 0, 52, 53, 5, 34, 0, 0, 53, 54, 5,
-		1, 0, 0, 54, 55, 3, 16, 8, 0, 55, 56, 5, 2, 0, 0, 56, 57, 5, 34, 0, 0,
-		57, 58, 7, 2, 0, 0, 58, 59, 5, 34, 0, 0, 59, 60, 3, 6, 3, 0, 60, 62, 1,
-		0, 0, 0, 61, 24, 1, 0, 0, 0, 61, 41, 1, 0, 0, 0, 61, 45, 1, 0, 0, 0, 61,
-		51, 1, 0, 0, 0, 62, 70, 1, 0, 0, 0, 63, 64, 10, 4, 0, 0, 64, 65, 5, 34,
-		0, 0, 65, 66, 5, 9, 0, 0, 66, 67, 5, 34, 0, 0, 67, 69, 3, 0, 0, 5, 68,
-		63, 1, 0, 0, 0, 69, 72, 1, 0, 0, 0, 70, 68, 1, 0, 0, 0, 70, 71, 1, 0, 0,
-		0, 71, 1, 1, 0, 0, 0, 72, 70, 1, 0, 0, 0, 73, 75, 5, 26, 0, 0, 74, 76,
-		3, 4, 2, 0, 75, 74, 1, 0, 0, 0, 75, 76, 1, 0, 0, 0, 76, 3, 1, 0, 0, 0,
-		77, 78, 5, 4, 0, 0, 78, 79, 3, 2, 1, 0, 79, 5, 1, 0, 0, 0, 80, 96, 5, 10,
-		0, 0, 81, 96, 5, 11, 0, 0, 82, 96, 5, 27, 0, 0, 83, 96, 5, 28, 0, 0, 84,
-		96, 5, 29, 0, 0, 85, 87, 5, 5, 0, 0, 86, 85, 1, 0, 0, 0, 86, 87, 1, 0,
-		0, 0, 87, 88, 1, 0, 0, 0, 88, 90, 5, 30, 0, 0, 89, 91, 5, 31, 0, 0, 90,
-		89, 1, 0, 0, 0, 90, 91, 1, 0, 0, 0, 91, 96, 1, 0, 0, 0, 92, 96, 3, 20,
-		10, 0, 93, 96, 3, 12, 6, 0, 94, 96, 3, 8, 4, 0, 95, 80, 1, 0, 0, 0, 95,
-		81, 1, 0, 0, 0, 95, 82, 1, 0, 0, 0, 95, 83, 1, 0, 0, 0, 95, 84, 1, 0, 0,
-		0, 95, 86, 1, 0, 0, 0, 95, 92, 1, 0, 0, 0, 95, 93, 1, 0, 0, 0, 95, 94,
-		1, 0, 0, 0, 96, 7, 1, 0, 0, 0, 97, 98, 5, 6, 0, 0, 98, 99, 3, 10, 5, 0,
-		99, 9, 1, 0, 0, 0, 100, 101, 5, 28, 0, 0, 101, 102, 5, 33, 0, 0, 102, 106,
-		3, 10, 5, 0, 103, 104, 5, 28, 0, 0, 104, 106, 5, 7, 0, 0, 105, 100, 1,
-		0, 0, 0, 105, 103, 1, 0, 0, 0, 106, 11, 1, 0, 0, 0, 107, 108, 5, 6, 0,
-		0, 108, 109, 3, 14, 7, 0, 109, 13, 1, 0, 0, 0, 110, 111, 5, 29, 0, 0, 111,
-		112, 5, 33, 0, 0, 112, 116, 3, 14, 7, 0, 113, 114, 5, 29, 0, 0, 114, 116,
-		5, 7, 0, 0, 115, 110, 1, 0, 0, 0, 115, 113, 1, 0, 0, 0, 116, 15, 1, 0,
-		0, 0, 117, 118, 3, 18, 9, 0, 118, 17, 1, 0, 0, 0, 119, 120, 3, 2, 1, 0,
-		120, 121, 5, 33, 0, 0, 121, 122, 3, 18, 9, 0, 122, 125, 1, 0, 0, 0, 123,
-		125, 3, 2, 1, 0, 124, 119, 1, 0, 0, 0, 124, 123, 1, 0, 0, 0, 125, 19, 1,
-		0, 0, 0, 126, 127, 5, 6, 0, 0, 127, 128, 3, 22, 11, 0, 128, 21, 1, 0, 0,
-		0, 129, 130, 5, 30, 0, 0, 130, 131, 5, 33, 0, 0, 131, 135, 3, 22, 11, 0,
-		132, 133, 5, 30, 0, 0, 133, 135, 5, 7, 0, 0, 134, 129, 1, 0, 0, 0, 134,
-		132, 1, 0, 0, 0, 135, 23, 1, 0, 0, 0, 14, 26, 29, 33, 37, 61, 70, 75, 86,
-		90, 95, 105, 115, 124, 134,
+		76, 8, 1, 1, 2, 1, 2, 1, 2, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 3,
+		3, 88, 8, 3, 1, 3, 1, 3, 3, 3, 92, 8, 3, 1, 3, 1, 3, 1, 3, 3, 3, 97, 8,
+		3, 1, 4, 1, 4, 1, 4, 1, 5, 1, 5, 1, 5, 1, 5, 1, 5, 3, 5, 107, 8, 5, 1,
+		6, 1, 6, 1, 6, 1, 7, 1, 7, 1, 7, 1, 7, 1, 7, 3, 7, 117, 8, 7, 1, 8, 1,
+		8, 1, 9, 1, 9, 1, 9, 1, 9, 1, 9, 3, 9, 126, 8, 9, 1, 10, 1, 10, 1, 10,
+		1, 11, 1, 11, 1, 11, 1, 11, 1, 11, 3, 11, 136, 8, 11, 1, 11, 0, 1, 0, 12,
+		0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 0, 3, 1, 0, 12, 21, 1, 0, 22,
+		25, 1, 0, 13, 18, 149, 0, 61, 1, 0, 0, 0, 2, 73, 1, 0, 0, 0, 4, 77, 1,
+		0, 0, 0, 6, 96, 1, 0, 0, 0, 8, 98, 1, 0, 0, 0, 10, 106, 1, 0, 0, 0, 12,
+		108, 1, 0, 0, 0, 14, 116, 1, 0, 0, 0, 16, 118, 1, 0, 0, 0, 18, 125, 1,
+		0, 0, 0, 20, 127, 1, 0, 0, 0, 22, 135, 1, 0, 0, 0, 24, 26, 6, 0, -1, 0,
+		25, 27, 5, 8, 0, 0, 26, 25, 1, 0, 0, 0, 26, 27, 1, 0, 0, 0, 27, 29, 1,
+		0, 0, 0, 28, 30, 5, 35, 0, 0, 29, 28, 1, 0, 0, 0, 29, 30, 1, 0, 0, 0, 30,
+		31, 1, 0, 0, 0, 31, 33, 5, 1, 0, 0, 32, 34, 5, 35, 0, 0, 33, 32, 1, 0,
+		0, 0, 33, 34, 1, 0, 0, 0, 34, 35, 1, 0, 0, 0, 35, 37, 3, 0, 0, 0, 36, 38,
+		5, 35, 0, 0, 37, 36, 1, 0, 0, 0, 37, 38, 1, 0, 0, 0, 38, 39, 1, 0, 0, 0,
+		39, 40, 5, 2, 0, 0, 40, 62, 1, 0, 0, 0, 41, 42, 3, 2, 1, 0, 42, 43, 5,
+		35, 0, 0, 43, 44, 5, 3, 0, 0, 44, 62, 1, 0, 0, 0, 45, 46, 3, 2, 1, 0, 46,
+		47, 5, 35, 0, 0, 47, 48, 7, 0, 0, 0, 48, 49, 5, 35, 0, 0, 49, 50, 3, 6,
+		3, 0, 50, 62, 1, 0, 0, 0, 51, 52, 7, 1, 0, 0, 52, 53, 5, 35, 0, 0, 53,
+		54, 5, 1, 0, 0, 54, 55, 3, 16, 8, 0, 55, 56, 5, 2, 0, 0, 56, 57, 5, 35,
+		0, 0, 57, 58, 7, 2, 0, 0, 58, 59, 5, 35, 0, 0, 59, 60, 3, 6, 3, 0, 60,
+		62, 1, 0, 0, 0, 61, 24, 1, 0, 0, 0, 61, 41, 1, 0, 0, 0, 61, 45, 1, 0, 0,
+		0, 61, 51, 1, 0, 0, 0, 62, 70, 1, 0, 0, 0, 63, 64, 10, 4, 0, 0, 64, 65,
+		5, 35, 0, 0, 65, 66, 5, 9, 0, 0, 66, 67, 5, 35, 0, 0, 67, 69, 3, 0, 0,
+		5, 68, 63, 1, 0, 0, 0, 69, 72, 1, 0, 0, 0, 70, 68, 1, 0, 0, 0, 70, 71,
+		1, 0, 0, 0, 71, 1, 1, 0, 0, 0, 72, 70, 1, 0, 0, 0, 73, 75, 5, 26, 0, 0,
+		74, 76, 3, 4, 2, 0, 75, 74, 1, 0, 0, 0, 75, 76, 1, 0, 0, 0, 76, 3, 1, 0,
+		0, 0, 77, 78, 5, 4, 0, 0, 78, 79, 3, 2, 1, 0, 79, 5, 1, 0, 0, 0, 80, 97,
+		5, 10, 0, 0, 81, 97, 5, 11, 0, 0, 82, 97, 5, 28, 0, 0, 83, 97, 5, 29, 0,
+		0, 84, 97, 5, 30, 0, 0, 85, 97, 5, 27, 0, 0, 86, 88, 5, 5, 0, 0, 87, 86,
+		1, 0, 0, 0, 87, 88, 1, 0, 0, 0, 88, 89, 1, 0, 0, 0, 89, 91, 5, 31, 0, 0,
+		90, 92, 5, 32, 0, 0, 91, 90, 1, 0, 0, 0, 91, 92, 1, 0, 0, 0, 92, 97, 1,
+		0, 0, 0, 93, 97, 3, 20, 10, 0, 94, 97, 3, 12, 6, 0, 95, 97, 3, 8, 4, 0,
+		96, 80, 1, 0, 0, 0, 96, 81, 1, 0, 0, 0, 96, 82, 1, 0, 0, 0, 96, 83, 1,
+		0, 0, 0, 96, 84, 1, 0, 0, 0, 96, 85, 1, 0, 0, 0, 96, 87, 1, 0, 0, 0, 96,
+		93, 1, 0, 0, 0, 96, 94, 1, 0, 0, 0, 96, 95, 1, 0, 0, 0, 97, 7, 1, 0, 0,
+		0, 98, 99, 5, 6, 0, 0, 99, 100, 3, 10, 5, 0, 100, 9, 1, 0, 0, 0, 101, 102,
+		5, 29, 0, 0, 102, 103, 5, 34, 0, 0, 103, 107, 3, 10, 5, 0, 104, 105, 5,
+		29, 0, 0, 105, 107, 5, 7, 0, 0, 106, 101, 1, 0, 0, 0, 106, 104, 1, 0, 0,
+		0, 107, 11, 1, 0, 0, 0, 108, 109, 5, 6, 0, 0, 109, 110, 3, 14, 7, 0, 110,
+		13, 1, 0, 0, 0, 111, 112, 5, 30, 0, 0, 112, 113, 5, 34, 0, 0, 113, 117,
+		3, 14, 7, 0, 114, 115, 5, 30, 0, 0, 115, 117, 5, 7, 0, 0, 116, 111, 1,
+		0, 0, 0, 116, 114, 1, 0, 0, 0, 117, 15, 1, 0, 0, 0, 118, 119, 3, 18, 9,
+		0, 119, 17, 1, 0, 0, 0, 120, 121, 3, 2, 1, 0, 121, 122, 5, 34, 0, 0, 122,
+		123, 3, 18, 9, 0, 123, 126, 1, 0, 0, 0, 124, 126, 3, 2, 1, 0, 125, 120,
+		1, 0, 0, 0, 125, 124, 1, 0, 0, 0, 126, 19, 1, 0, 0, 0, 127, 128, 5, 6,
+		0, 0, 128, 129, 3, 22, 11, 0, 129, 21, 1, 0, 0, 0, 130, 131, 5, 31, 0,
+		0, 131, 132, 5, 34, 0, 0, 132, 136, 3, 22, 11, 0, 133, 134, 5, 31, 0, 0,
+		134, 136, 5, 7, 0, 0, 135, 130, 1, 0, 0, 0, 135, 133, 1, 0, 0, 0, 136,
+		23, 1, 0, 0, 0, 14, 26, 29, 33, 37, 61, 70, 75, 87, 91, 96, 106, 116, 125,
+		135,
 	}
 	deserializer := antlr.NewATNDeserializer(nil)
 	staticData.atn = deserializer.Deserialize(staticData.serializedATN)
@@ -172,14 +173,15 @@ const (
 	JsonQueryParserMINUS            = 24
 	JsonQueryParserDIVISON          = 25
 	JsonQueryParserATTRNAME         = 26
-	JsonQueryParserVERSION          = 27
-	JsonQueryParserSTRING           = 28
-	JsonQueryParserDOUBLE           = 29
-	JsonQueryParserINT              = 30
-	JsonQueryParserEXP              = 31
-	JsonQueryParserNEWLINE          = 32
-	JsonQueryParserCOMMA            = 33
-	JsonQueryParserSP               = 34
+	JsonQueryParserDATETIME         = 27
+	JsonQueryParserVERSION          = 28
+	JsonQueryParserSTRING           = 29
+	JsonQueryParserDOUBLE           = 30
+	JsonQueryParserINT              = 31
+	JsonQueryParserEXP              = 32
+	JsonQueryParserNEWLINE          = 33
+	JsonQueryParserCOMMA            = 34
+	JsonQueryParserSP               = 35
 )
 
 // JsonQueryParser rules.
@@ -1398,6 +1400,38 @@ func (s *ListOfStringsContext) Accept(visitor antlr.ParseTreeVisitor) interface{
 	}
 }
 
+type DatetimeContext struct {
+	ValueContext
+}
+
+func NewDatetimeContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *DatetimeContext {
+	var p = new(DatetimeContext)
+
+	InitEmptyValueContext(&p.ValueContext)
+	p.parser = parser
+	p.CopyAll(ctx.(*ValueContext))
+
+	return p
+}
+
+func (s *DatetimeContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *DatetimeContext) DATETIME() antlr.TerminalNode {
+	return s.GetToken(JsonQueryParserDATETIME, 0)
+}
+
+func (s *DatetimeContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case JsonQueryVisitor:
+		return t.VisitDatetime(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 type BooleanContext struct {
 	ValueContext
 }
@@ -1643,7 +1677,7 @@ func (p *JsonQueryParser) Value() (localctx IValueContext) {
 	p.EnterRule(localctx, 6, JsonQueryParserRULE_value)
 	var _la int
 
-	p.SetState(95)
+	p.SetState(96)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -1711,9 +1745,21 @@ func (p *JsonQueryParser) Value() (localctx IValueContext) {
 		}
 
 	case 6:
-		localctx = NewLongContext(p, localctx)
+		localctx = NewDatetimeContext(p, localctx)
 		p.EnterOuterAlt(localctx, 6)
-		p.SetState(86)
+		{
+			p.SetState(85)
+			p.Match(JsonQueryParserDATETIME)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+
+	case 7:
+		localctx = NewLongContext(p, localctx)
+		p.EnterOuterAlt(localctx, 7)
+		p.SetState(87)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -1722,7 +1768,7 @@ func (p *JsonQueryParser) Value() (localctx IValueContext) {
 
 		if _la == JsonQueryParserT__4 {
 			{
-				p.SetState(85)
+				p.SetState(86)
 				p.Match(JsonQueryParserT__4)
 				if p.HasError() {
 					// Recognition error - abort rule
@@ -1732,19 +1778,19 @@ func (p *JsonQueryParser) Value() (localctx IValueContext) {
 
 		}
 		{
-			p.SetState(88)
+			p.SetState(89)
 			p.Match(JsonQueryParserINT)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
 			}
 		}
-		p.SetState(90)
+		p.SetState(91)
 		p.GetErrorHandler().Sync(p)
 
 		if p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 8, p.GetParserRuleContext()) == 1 {
 			{
-				p.SetState(89)
+				p.SetState(90)
 				p.Match(JsonQueryParserEXP)
 				if p.HasError() {
 					// Recognition error - abort rule
@@ -1756,27 +1802,27 @@ func (p *JsonQueryParser) Value() (localctx IValueContext) {
 			goto errorExit
 		}
 
-	case 7:
-		localctx = NewListOfIntsContext(p, localctx)
-		p.EnterOuterAlt(localctx, 7)
-		{
-			p.SetState(92)
-			p.ListInts()
-		}
-
 	case 8:
-		localctx = NewListOfDoublesContext(p, localctx)
+		localctx = NewListOfIntsContext(p, localctx)
 		p.EnterOuterAlt(localctx, 8)
 		{
 			p.SetState(93)
-			p.ListDoubles()
+			p.ListInts()
 		}
 
 	case 9:
-		localctx = NewListOfStringsContext(p, localctx)
+		localctx = NewListOfDoublesContext(p, localctx)
 		p.EnterOuterAlt(localctx, 9)
 		{
 			p.SetState(94)
+			p.ListDoubles()
+		}
+
+	case 10:
+		localctx = NewListOfStringsContext(p, localctx)
+		p.EnterOuterAlt(localctx, 10)
+		{
+			p.SetState(95)
 			p.ListStrings()
 		}
 
@@ -1882,7 +1928,7 @@ func (p *JsonQueryParser) ListStrings() (localctx IListStringsContext) {
 	p.EnterRule(localctx, 8, JsonQueryParserRULE_listStrings)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(97)
+		p.SetState(98)
 		p.Match(JsonQueryParserT__5)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -1890,7 +1936,7 @@ func (p *JsonQueryParser) ListStrings() (localctx IListStringsContext) {
 		}
 	}
 	{
-		p.SetState(98)
+		p.SetState(99)
 		p.SubListOfStrings()
 	}
 
@@ -2000,7 +2046,7 @@ func (s *SubListOfStringsContext) Accept(visitor antlr.ParseTreeVisitor) interfa
 func (p *JsonQueryParser) SubListOfStrings() (localctx ISubListOfStringsContext) {
 	localctx = NewSubListOfStringsContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 10, JsonQueryParserRULE_subListOfStrings)
-	p.SetState(105)
+	p.SetState(106)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -2010,16 +2056,8 @@ func (p *JsonQueryParser) SubListOfStrings() (localctx ISubListOfStringsContext)
 	case 1:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(100)
-			p.Match(JsonQueryParserSTRING)
-			if p.HasError() {
-				// Recognition error - abort rule
-				goto errorExit
-			}
-		}
-		{
 			p.SetState(101)
-			p.Match(JsonQueryParserCOMMA)
+			p.Match(JsonQueryParserSTRING)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
@@ -2027,13 +2065,21 @@ func (p *JsonQueryParser) SubListOfStrings() (localctx ISubListOfStringsContext)
 		}
 		{
 			p.SetState(102)
+			p.Match(JsonQueryParserCOMMA)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(103)
 			p.SubListOfStrings()
 		}
 
 	case 2:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(103)
+			p.SetState(104)
 			p.Match(JsonQueryParserSTRING)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -2041,7 +2087,7 @@ func (p *JsonQueryParser) SubListOfStrings() (localctx ISubListOfStringsContext)
 			}
 		}
 		{
-			p.SetState(104)
+			p.SetState(105)
 			p.Match(JsonQueryParserT__6)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -2151,7 +2197,7 @@ func (p *JsonQueryParser) ListDoubles() (localctx IListDoublesContext) {
 	p.EnterRule(localctx, 12, JsonQueryParserRULE_listDoubles)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(107)
+		p.SetState(108)
 		p.Match(JsonQueryParserT__5)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -2159,7 +2205,7 @@ func (p *JsonQueryParser) ListDoubles() (localctx IListDoublesContext) {
 		}
 	}
 	{
-		p.SetState(108)
+		p.SetState(109)
 		p.SubListOfDoubles()
 	}
 
@@ -2269,7 +2315,7 @@ func (s *SubListOfDoublesContext) Accept(visitor antlr.ParseTreeVisitor) interfa
 func (p *JsonQueryParser) SubListOfDoubles() (localctx ISubListOfDoublesContext) {
 	localctx = NewSubListOfDoublesContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 14, JsonQueryParserRULE_subListOfDoubles)
-	p.SetState(115)
+	p.SetState(116)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -2279,16 +2325,8 @@ func (p *JsonQueryParser) SubListOfDoubles() (localctx ISubListOfDoublesContext)
 	case 1:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(110)
-			p.Match(JsonQueryParserDOUBLE)
-			if p.HasError() {
-				// Recognition error - abort rule
-				goto errorExit
-			}
-		}
-		{
 			p.SetState(111)
-			p.Match(JsonQueryParserCOMMA)
+			p.Match(JsonQueryParserDOUBLE)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
@@ -2296,13 +2334,21 @@ func (p *JsonQueryParser) SubListOfDoubles() (localctx ISubListOfDoublesContext)
 		}
 		{
 			p.SetState(112)
+			p.Match(JsonQueryParserCOMMA)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(113)
 			p.SubListOfDoubles()
 		}
 
 	case 2:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(113)
+			p.SetState(114)
 			p.Match(JsonQueryParserDOUBLE)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -2310,7 +2356,7 @@ func (p *JsonQueryParser) SubListOfDoubles() (localctx ISubListOfDoublesContext)
 			}
 		}
 		{
-			p.SetState(114)
+			p.SetState(115)
 			p.Match(JsonQueryParserT__6)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -2420,7 +2466,7 @@ func (p *JsonQueryParser) ListAttrPaths() (localctx IListAttrPathsContext) {
 	p.EnterRule(localctx, 16, JsonQueryParserRULE_listAttrPaths)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(117)
+		p.SetState(118)
 		p.SubListOfAttrPaths()
 	}
 
@@ -2542,7 +2588,7 @@ func (s *SubListOfAttrPathsContext) Accept(visitor antlr.ParseTreeVisitor) inter
 func (p *JsonQueryParser) SubListOfAttrPaths() (localctx ISubListOfAttrPathsContext) {
 	localctx = NewSubListOfAttrPathsContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 18, JsonQueryParserRULE_subListOfAttrPaths)
-	p.SetState(124)
+	p.SetState(125)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -2552,11 +2598,11 @@ func (p *JsonQueryParser) SubListOfAttrPaths() (localctx ISubListOfAttrPathsCont
 	case 1:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(119)
+			p.SetState(120)
 			p.AttrPath()
 		}
 		{
-			p.SetState(120)
+			p.SetState(121)
 			p.Match(JsonQueryParserCOMMA)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -2564,14 +2610,14 @@ func (p *JsonQueryParser) SubListOfAttrPaths() (localctx ISubListOfAttrPathsCont
 			}
 		}
 		{
-			p.SetState(121)
+			p.SetState(122)
 			p.SubListOfAttrPaths()
 		}
 
 	case 2:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(123)
+			p.SetState(124)
 			p.AttrPath()
 		}
 
@@ -2677,7 +2723,7 @@ func (p *JsonQueryParser) ListInts() (localctx IListIntsContext) {
 	p.EnterRule(localctx, 20, JsonQueryParserRULE_listInts)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(126)
+		p.SetState(127)
 		p.Match(JsonQueryParserT__5)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -2685,7 +2731,7 @@ func (p *JsonQueryParser) ListInts() (localctx IListIntsContext) {
 		}
 	}
 	{
-		p.SetState(127)
+		p.SetState(128)
 		p.SubListOfInts()
 	}
 
@@ -2795,7 +2841,7 @@ func (s *SubListOfIntsContext) Accept(visitor antlr.ParseTreeVisitor) interface{
 func (p *JsonQueryParser) SubListOfInts() (localctx ISubListOfIntsContext) {
 	localctx = NewSubListOfIntsContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 22, JsonQueryParserRULE_subListOfInts)
-	p.SetState(134)
+	p.SetState(135)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -2805,16 +2851,8 @@ func (p *JsonQueryParser) SubListOfInts() (localctx ISubListOfIntsContext) {
 	case 1:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(129)
-			p.Match(JsonQueryParserINT)
-			if p.HasError() {
-				// Recognition error - abort rule
-				goto errorExit
-			}
-		}
-		{
 			p.SetState(130)
-			p.Match(JsonQueryParserCOMMA)
+			p.Match(JsonQueryParserINT)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
@@ -2822,13 +2860,21 @@ func (p *JsonQueryParser) SubListOfInts() (localctx ISubListOfIntsContext) {
 		}
 		{
 			p.SetState(131)
+			p.Match(JsonQueryParserCOMMA)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(132)
 			p.SubListOfInts()
 		}
 
 	case 2:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(132)
+			p.SetState(133)
 			p.Match(JsonQueryParserINT)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -2836,7 +2882,7 @@ func (p *JsonQueryParser) SubListOfInts() (localctx ISubListOfIntsContext) {
 			}
 		}
 		{
-			p.SetState(133)
+			p.SetState(134)
 			p.Match(JsonQueryParserT__6)
 			if p.HasError() {
 				// Recognition error - abort rule

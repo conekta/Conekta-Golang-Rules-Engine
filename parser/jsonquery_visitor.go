@@ -44,6 +44,9 @@ type JsonQueryVisitor interface {
 	// Visit a parse tree produced by JsonQueryParser#double.
 	VisitDouble(ctx *DoubleContext) interface{}
 
+	// Visit a parse tree produced by JsonQueryParser#datetime.
+	VisitDatetime(ctx *DatetimeContext) interface{}
+
 	// Visit a parse tree produced by JsonQueryParser#long.
 	VisitLong(ctx *LongContext) interface{}
 

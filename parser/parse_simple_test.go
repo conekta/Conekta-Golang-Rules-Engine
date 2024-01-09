@@ -1243,3 +1243,243 @@ func TestString(t *testing.T) {
 		assert.Equal(t, false, Evaluate(tt.rule, obj{"x": 3}), tt.rule)
 	}
 }
+
+func TestDateTime(t *testing.T) {
+	tests := []testCase{
+		{
+			`x EQ 2024-01-09T13:31`,
+			obj{
+				"x": "2024-01-09T13:31",
+			},
+			true,
+			false,
+		},
+		{
+			`x EQ 2024-01-09T13:31`,
+			obj{
+				"x": "2024-01-09T13:32",
+			},
+			false,
+			false,
+		},
+		{
+			`x EQ 2024-01-09T13:31`,
+			obj{
+				"y": "AAAA-01-09T13:31",
+			},
+			false,
+			false,
+		},
+		{
+			`x EQ 2024-01-09T13:31`,
+			obj{},
+			false,
+			false,
+		},
+		{
+			`x EQ 2024-01-09T13:31`,
+			obj{
+				"x": "2025-01-09T13:31",
+			},
+			false,
+			false,
+		},
+		{
+			`x NE 2024-01-09T13:31`,
+			obj{
+				"x": "2024-01-09T13:31",
+			},
+			false,
+			false,
+		},
+		{
+			`x NE 2024-01-09T13:31`,
+			obj{
+				"x": 2.3,
+			},
+			false,
+			false,
+		},
+		{
+			`x NE 2024-01-09T13:31`,
+			obj{
+				"x": "2025-01-09T13:31",
+			},
+			true,
+			false,
+		},
+		{
+			`x LT 2024-01-09T13:31`,
+			obj{
+				"x": "2023-01-09T13:31",
+			},
+			true,
+			false,
+		},
+		{
+			`x LT 2024-01-09T13:31`,
+			obj{
+				"x": "2024-02-09T13:31",
+			},
+			false,
+			false,
+		},
+		{
+			`x LT 2024-01-09T13:31`,
+			obj{
+				"x": 1,
+			},
+			false,
+			false,
+		},
+		{
+			`x LE 2024-01-09T13:31`,
+			obj{
+				"x": "2024-01-09T13:31",
+			},
+			true,
+			false,
+		},
+		{
+			`x LE 2024-01-09T13:31`,
+			obj{
+				"x": "2023-01-09T13:31",
+			},
+			true,
+			false,
+		},
+		{
+			`x LE 2024-01-09T13:31`,
+			obj{
+				"x": "2024-01-10T13:31",
+			},
+			false,
+			false,
+		},
+		{
+			`x LE 2024-01-09T13:31`,
+			obj{
+				"x": 2,
+			},
+			false,
+			false,
+		},
+		{
+			`x GT 2024-01-09T13:31`,
+			obj{
+				"x": "2024-01-09T14:31",
+			},
+			true,
+			false,
+		},
+		{
+			`x GT 2024-01-09T13:31`,
+			obj{
+				"x": "2024-01-09T13:21",
+			},
+			false,
+			false,
+		},
+		{
+			`x GT 2024-01-09T13:31`,
+			obj{
+				"x": 1,
+			},
+			false,
+			false,
+		},
+		{
+			`x GE 2024-01-09T13:31`,
+			obj{
+				"x": "2024-02-09T13:31",
+			},
+			true,
+			false,
+		},
+		{
+			`x GE 2024-01-09T13:31`,
+			obj{
+				"x": "2024-01-09T13:30",
+			},
+			false,
+			false,
+		},
+		{
+			`x GE 2024-01-09T13:31`,
+			obj{
+				"x": "2024-01-09T13:31",
+			},
+			true,
+			false,
+		},
+		{
+			`x GE 2024-01-09T13:31`,
+			obj{
+				"x": 1,
+			},
+			false,
+			false,
+		},
+		{
+			`x == 2024-01-09T13:31`,
+			obj{
+				"x": "2024-01-09T13:31",
+			},
+			true,
+			false,
+		},
+		{
+			`x > 2024-01-09T13:31`,
+			obj{
+				"x": "2024-01-09T13:32",
+			},
+			true,
+			false,
+		},
+		{
+			`x < 2024-01-09T13:31`,
+			obj{
+				"x": "2024-01-09T13:30",
+			},
+			true,
+			false,
+		},
+		{
+			`x <= 2024-01-09T13:31`,
+			obj{
+				"x": "2024-01-09T13:31",
+			},
+			true,
+			false,
+		},
+		{
+			`x >= 2024-01-09T13:31`,
+			obj{
+				"x": "2024-01-09T13:31",
+			},
+			true,
+			false,
+		},
+		{
+			`x != 2024-01-09T13:31`,
+			obj{
+				"x": "2024-01-09T13:32",
+			},
+			true,
+			false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.rule, func(t *testing.T) {
+			result, err := eval(t, tt.rule, tt.input)
+			if tt.hasError {
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, result, tt.result, fmt.Sprintf("rule :%s, input :%v", tt.rule, tt.input))
+			}
+			assert.Equal(t, tt.result, Evaluate(fmt.Sprintf("(%s)", tt.rule), tt.input), tt.rule)
+		})
+	}
+}
