@@ -1,11 +1,3 @@
-[![Go Report Card](https://goreportcard.com/badge/github.com/nikunjy/rules?style=flat-square)](https://goreportcard.com/report/github.com/nikunjy/rules)
-[![PkgGoDev](https://pkg.go.dev/badge/github.com/github.com/nikunjy/rules)](https://pkg.go.dev/github.com/nikunjy/rules)
-[![Release](https://img.shields.io/github/v/release/nikunjy/rules?sort=semver&style=flat-square)](https://github.com/nikunjy/rules/releases/latest)
-[![Release](https://img.shields.io/github/go-mod/go-version/nikunjy/rules?style=flat-square)](https://github.com/nikunjy/rules/releases/latest)
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg?style=flat-square)](https://github.com/nikunjy/rules/commits)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![GitHub stars](https://img.shields.io/github/stars/nikunjy/rules?style=flat-square&label=Star&maxAge=2592000)](https://github.com/nikunjy/rules/stargazers/)
-
 # Golang Rules Engine
 
 Rules engine written in golang with the help of antlr.
@@ -81,6 +73,3 @@ I would recommend importing `github.com/nikunjy/rules/parser`
    The article has a whole lot of detail about antlr I encourage you to read it, you might also like [my blog post](https://medium.com/@nikunjyadav/generic-rules-engine-in-golang-using-antlr-d30a0d0bb565) about this repo.
 2. After taking a look at the antlr tutorial, you can extend the [JsonQuery.g4 file](https://github.com/nikunjy/rules/blob/master/parser/JsonQuery.g4).
 3. Compile the parser `antlr4 -Dlanguage=Go -visitor -no-listener JsonQuery.g4 -o ./` (Note: `-o` is the output directory, make sure all the stuff it generates is in the `parser` directory of the root repo folder)
-
-[ci-img]: https://api.travis-ci.org/nikunjy/rules.svg?branch=master
-[ci]: https://travis-ci.org/nikunjy/rules

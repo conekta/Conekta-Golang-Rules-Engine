@@ -3,24 +3,24 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
+	"os"
 
 	"github.com/conekta/Conekta-Golang-Rules-Engine/parser"
 )
 
 func main() {
-	jsonFile, err := ioutil.ReadFile("test.json")
+	jsonFile, err := os.ReadFile("test.json")
 	if err != nil {
 		log.Fatal(fmt.Errorf("error reading obj from file %v", err))
 	}
-	rulesBytes, err := ioutil.ReadFile("rules.txt")
+	rulesBytes, err := os.ReadFile("rules.txt")
 	if err != nil {
 		log.Fatal(fmt.Errorf("error reading rule from file %v", err))
 	}
 	var rulesString = string(rulesBytes)
 	var info map[string]interface{}
-	json.Unmarshal([]byte(jsonFile), &info)
+	json.Unmarshal(jsonFile, &info)
 	ev, err := parser.NewEvaluator(rulesString)
 	if err != nil {
 		log.Fatal(fmt.Errorf("error making evaluator from the rule %v, %v", rulesString, err))
