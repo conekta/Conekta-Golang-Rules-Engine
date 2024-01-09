@@ -11,6 +11,9 @@ type JsonQueryVisitor interface {
 	// Visit a parse tree produced by JsonQueryParser#compareExp.
 	VisitCompareExp(ctx *CompareExpContext) interface{}
 
+	// Visit a parse tree produced by JsonQueryParser#mulSumExp.
+	VisitMulSumExp(ctx *MulSumExpContext) interface{}
+
 	// Visit a parse tree produced by JsonQueryParser#parenExp.
 	VisitParenExp(ctx *ParenExpContext) interface{}
 
@@ -64,6 +67,12 @@ type JsonQueryVisitor interface {
 
 	// Visit a parse tree produced by JsonQueryParser#subListOfDoubles.
 	VisitSubListOfDoubles(ctx *SubListOfDoublesContext) interface{}
+
+	// Visit a parse tree produced by JsonQueryParser#listAttrPaths.
+	VisitListAttrPaths(ctx *ListAttrPathsContext) interface{}
+
+	// Visit a parse tree produced by JsonQueryParser#subListOfAttrPaths.
+	VisitSubListOfAttrPaths(ctx *SubListOfAttrPathsContext) interface{}
 
 	// Visit a parse tree produced by JsonQueryParser#listInts.
 	VisitListInts(ctx *ListIntsContext) interface{}
