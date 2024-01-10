@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/antlr4-go/antlr/v4"
 )
@@ -546,4 +547,15 @@ func (j *JsonQueryVisitorImpl) VisitSubListOfStrings(ctx *SubListOfStringsContex
 		return nil
 	}
 	return ctx.SubListOfStrings().Accept(j)
+}
+
+func (j *JsonQueryVisitorImpl) VisitDatetime(ctx *DatetimeContext) interface{} {
+	j.currentOperation = &DateTimeOperation{}
+	rightOp, err := time.Parse(timeLayout, ctx.GetText())
+	if err != nil {
+		j.setErr(err)
+		return nil
+	}
+	j.rightOp = rightOp
+	return nil
 }

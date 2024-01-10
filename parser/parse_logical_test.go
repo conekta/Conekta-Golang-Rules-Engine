@@ -246,3 +246,60 @@ func TestLogicalExpWithAndWithExtraSpaces(t *testing.T) {
 		})
 	}
 }
+
+func TestLogicalExpWithDateTime(t *testing.T) {
+	tests := []testCase{
+		{
+			`x < 2024-01-09T13:31 and ( z < 2)`,
+			obj{
+				"x": "2024-01-09T13:30",
+				"z": 1,
+			},
+			true,
+			false,
+		},
+		{
+			`x < 2 and ( y > 4 or z == 2024-01-09T13:20 )`,
+			obj{
+				"x": 1,
+				"y": 3,
+				"z": "2024-01-09T13:20",
+			},
+			true,
+			false,
+		},
+		{
+			`x < 2 and ( y > 4 or z == 2024-01-09T13:20 )`,
+			obj{
+				"x": 3,
+				"y": 3,
+				"z": "2024-01-09T13:20",
+			},
+			false,
+			false,
+		},
+		{
+			`x < 2 and ( y == "foo" or z == 2024-01-09T13:20 )`,
+			obj{
+				"x": 1,
+				"y": "foo",
+				"z": "2024-01-09T13:20",
+			},
+			true,
+			false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.rule, func(t *testing.T) {
+			result, err := eval(t, tt.rule, tt.input)
+			if tt.hasError {
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, result, tt.result, fmt.Sprintf("rule :%s, input :%v", tt.rule, tt.input))
+			}
+			assert.Equal(t, tt.result, Evaluate(fmt.Sprintf("(%s)", tt.rule), tt.input), tt.rule)
+		})
+	}
+}
