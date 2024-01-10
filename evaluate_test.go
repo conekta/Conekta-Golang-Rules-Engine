@@ -2,6 +2,7 @@ package rules
 
 import (
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/require"
 )
@@ -126,6 +127,23 @@ func TestCombiningMultipleOperators(t *testing.T) {
 			"x": 8,
 			"y": 7,
 			"a": 5,
+		})
+		require.NoError(t, err)
+		require.True(t, res)
+	})
+}
+
+func TestTimeAddMonth(t *testing.T) {
+	t.Run("x < TIME_NOW_ADD(1)", func(t *testing.T) {
+		res, err := Evaluate(`x < TIME_NOW_ADD(1)`, map[string]interface{}{
+			"x": "2024-01-09T16:18",
+		})
+		require.NoError(t, err)
+		require.True(t, res)
+	})
+	t.Run("x > TIME_NOW_ADD(-1)", func(t *testing.T) {
+		res, err := Evaluate(`x > TIME_NOW_ADD(-1)`, map[string]interface{}{
+			"x": time.Now().UTC().AddDate(0, 1, 0).Format("2006-01-02T15:04"),
 		})
 		require.NoError(t, err)
 		require.True(t, res)
