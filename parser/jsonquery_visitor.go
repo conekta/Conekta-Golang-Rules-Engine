@@ -14,6 +14,9 @@ type JsonQueryVisitor interface {
 	// Visit a parse tree produced by JsonQueryParser#mulSumExp.
 	VisitMulSumExp(ctx *MulSumExpContext) interface{}
 
+	// Visit a parse tree produced by JsonQueryParser#timeNowAddExp.
+	VisitTimeNowAddExp(ctx *TimeNowAddExpContext) interface{}
+
 	// Visit a parse tree produced by JsonQueryParser#parenExp.
 	VisitParenExp(ctx *ParenExpContext) interface{}
 

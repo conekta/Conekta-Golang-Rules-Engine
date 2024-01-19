@@ -279,7 +279,17 @@ func TestLogicalExpWithDateTime(t *testing.T) {
 			false,
 		},
 		{
-			`x < 2 and ( y == "foo" or z == 2024-01-09T13:20 )`,
+			`x < 2 and ( y != "foo" or z == 2024-01-09T13:20 )`,
+			obj{
+				"x": 1,
+				"y": "foo",
+				"z": "2024-01-09T13:20",
+			},
+			true,
+			false,
+		},
+		{
+			`x < 2 and ( y != "foo" or z < TIME_NOW_ADD(1) )`,
 			obj{
 				"x": 1,
 				"y": "foo",

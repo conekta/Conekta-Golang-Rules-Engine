@@ -1,11 +1,12 @@
 grammar JsonQuery;
 
 query
-   : NOT? SP? '(' SP? query SP? ')'                                                                         #parenExp
-   | query SP LOGICAL_OPERATOR SP query                                                             #logicalExp
-   | attrPath SP 'pr'                                                                               #presentExp
-   | attrPath SP op=( EQ | NE | GT | LT | GE | LE | CO | SW | EW | IN ) SP value                    #compareExp
-   | (ASTERISK|PLUS|MINUS|DIVISON) SP '(' listAttrPaths ')' SP op=( EQ | NE | GT | LT | GE | LE ) SP value       #mulSumExp
+   : NOT? SP? '(' SP? query SP? ')'                                                                             #parenExp
+   | query SP LOGICAL_OPERATOR SP query                                                                         #logicalExp
+   | attrPath SP 'pr'                                                                                           #presentExp
+   | attrPath SP op=( EQ | NE | GT | LT | GE | LE | CO | SW | EW | IN ) SP value                                #compareExp
+   | attrPath SP op=( EQ | NE | GT | LT | GE | LE ) SP TIME_NOW_ADD SP '(' value ')'                           #timeNowAddExp
+   | (ASTERISK|PLUS|MINUS|DIVISON) SP '(' listAttrPaths ')' SP op=( EQ | NE | GT | LT | GE | LE ) SP value      #mulSumExp
    ;
 
 NOT
@@ -47,6 +48,7 @@ ASTERISK            : 'MLP' ;
 PLUS                : 'SUM' ;
 MINUS               : 'SUBTRACT' ;
 DIVISON             : 'DIV' ;
+TIME_NOW_ADD        : 'TIME_NOW_ADD' ;
 
 ATTRNAME
    : ALPHA ATTR_NAME_CHAR* ;

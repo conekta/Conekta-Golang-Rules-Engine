@@ -85,6 +85,8 @@ func (j *JsonQueryVisitorImpl) Visit(tree antlr.ParseTree) interface{} {
 		return val.Accept(j).(bool)
 	case *MulSumExpContext:
 		return val.Accept(j).(bool)
+	case *TimeNowAddExpContext:
+		return val.Accept(j).(bool)
 	default:
 		j.setErr(errors.New("invalid rule"))
 		return false
@@ -176,74 +178,7 @@ func (j *JsonQueryVisitorImpl) VisitMulSumExp(ctx *MulSumExpContext) interface{}
 	if j.hasErr() {
 		return false
 	}
-	var apply func(Operand, Operand) (bool, error)
-	currentOp := j.currentOperation
-	switch ctx.op.GetTokenType() {
-	case JsonQueryParserEQ:
-		apply = currentOp.EQ
-	case JsonQueryParserNE:
-		apply = currentOp.NE
-	case JsonQueryParserGT:
-		apply = currentOp.GT
-	case JsonQueryParserLT:
-		apply = currentOp.LT
-	case JsonQueryParserLE:
-		apply = currentOp.LE
-	case JsonQueryParserGE:
-		apply = currentOp.GE
-	default:
-		j.setErr(fmt.Errorf("unknown operation %s", ctx.op.GetText()))
-		return false
-	}
-	defer func() { j.rightOp = nil }()
-
-	ret, err := apply(j.leftOp, j.rightOp)
-	if err != nil {
-		switch err {
-		case ErrInvalidOperation:
-			// in case of invalid operation lets rather
-			// be conservative and return false because the rule doesn't even make
-			// sense. It can be argued that it would be false positive if we were
-			// to return true
-			j.setErr(err)
-			j.setDebugErr(
-				newNestedError(err, "Not a valid operation for datatypes").Set(ErrVals{
-					"operation":           ctx.op.GetTokenType(),
-					"object_path_operand": j.leftOp,
-					"rule_operand":        j.rightOp,
-				}),
-			)
-		case ErrEvalOperandMissing:
-			j.setDebugErr(
-				newNestedError(err, "Eval operand missing in input object").Set(ErrVals{
-					"attr_path": ctx.ListAttrPaths().GetText(),
-				}),
-			)
-		default:
-			switch err.(type) {
-			case *ErrInvalidOperand:
-				j.setDebugErr(
-					newNestedError(err, "operands are not the right value type").Set(ErrVals{
-						"attr_path":           ctx.ListAttrPaths().GetText(),
-						"object_path_operand": j.leftOp,
-						"rule_operand":        j.rightOp,
-					}),
-				)
-			default:
-				j.setDebugErr(
-					newNestedError(err, "unknown error").Set(ErrVals{
-						"attr_path":           ctx.ListAttrPaths().GetText(),
-						"object_path_operand": j.leftOp,
-						"rule_operand":        j.rightOp,
-					}),
-				)
-
-			}
-		}
-
-		return false
-	}
-	return ret
+	return j.evaluateOperation(ctx.op, ctx.ListAttrPaths())
 }
 
 func (j *JsonQueryVisitorImpl) VisitPresentExp(ctx *PresentExpContext) interface{} {
@@ -257,81 +192,7 @@ func (j *JsonQueryVisitorImpl) VisitCompareExp(ctx *CompareExpContext) interface
 	if j.hasErr() {
 		return false
 	}
-	var apply func(Operand, Operand) (bool, error)
-	currentOp := j.currentOperation
-	switch ctx.op.GetTokenType() {
-	case JsonQueryParserEQ:
-		apply = currentOp.EQ
-	case JsonQueryParserNE:
-		apply = currentOp.NE
-	case JsonQueryParserGT:
-		apply = currentOp.GT
-	case JsonQueryParserLT:
-		apply = currentOp.LT
-	case JsonQueryParserLE:
-		apply = currentOp.LE
-	case JsonQueryParserGE:
-		apply = currentOp.GE
-	case JsonQueryParserCO:
-		apply = currentOp.CO
-	case JsonQueryParserSW:
-		apply = currentOp.SW
-	case JsonQueryParserEW:
-		apply = currentOp.EW
-	case JsonQueryParserIN:
-		apply = currentOp.IN
-	default:
-		j.setErr(fmt.Errorf("unknown operation %s", ctx.op.GetText()))
-		return false
-	}
-	defer func() { j.rightOp = nil }()
-	ret, err := apply(j.leftOp, j.rightOp)
-	if err != nil {
-		switch err {
-		case ErrInvalidOperation:
-			// in case of invalid operation lets rather
-			// be conservative and return false because the rule doesn't even make
-			// sense. It can be argued that it would be false positive if we were
-			// to return true
-			j.setErr(err)
-			j.setDebugErr(
-				newNestedError(err, "Not a valid operation for datatypes").Set(ErrVals{
-					"operation":           ctx.op.GetTokenType(),
-					"object_path_operand": j.leftOp,
-					"rule_operand":        j.rightOp,
-				}),
-			)
-		case ErrEvalOperandMissing:
-			j.setDebugErr(
-				newNestedError(err, "Eval operand missing in input object").Set(ErrVals{
-					"attr_path": ctx.AttrPath().GetText(),
-				}),
-			)
-		default:
-			switch err.(type) {
-			case *ErrInvalidOperand:
-				j.setDebugErr(
-					newNestedError(err, "operands are not the right value type").Set(ErrVals{
-						"attr_path":           ctx.AttrPath().GetText(),
-						"object_path_operand": j.leftOp,
-						"rule_operand":        j.rightOp,
-					}),
-				)
-			default:
-				j.setDebugErr(
-					newNestedError(err, "unknown error").Set(ErrVals{
-						"attr_path":           ctx.AttrPath().GetText(),
-						"object_path_operand": j.leftOp,
-						"rule_operand":        j.rightOp,
-					}),
-				)
-
-			}
-		}
-
-		return false
-	}
-	return ret
+	return j.evaluateOperation(ctx.op, ctx.AttrPath())
 }
 
 func (j *JsonQueryVisitorImpl) VisitListAttrPaths(ctx *ListAttrPathsContext) interface{} {
@@ -558,4 +419,104 @@ func (j *JsonQueryVisitorImpl) VisitDatetime(ctx *DatetimeContext) interface{} {
 	}
 	j.rightOp = rightOp
 	return nil
+}
+
+func (j *JsonQueryVisitorImpl) VisitTimeNowAddExp(ctx *TimeNowAddExpContext) interface{} {
+	if ctx.TIME_NOW_ADD() == nil {
+		return false
+	}
+
+	ctx.AttrPath().Accept(j)
+	ctx.Value().Accept(j)
+	if j.hasErr() {
+		return false
+	}
+
+	monthFloat, err := strconv.ParseFloat(ctx.Value().GetText(), 10)
+	if err != nil {
+		j.setErr(err)
+		return false
+	}
+
+	j.rightOp = time.Now().UTC().AddDate(0, int(monthFloat), 0)
+	j.currentOperation = &DateTimeOperation{}
+	return j.evaluateOperation(ctx.op, ctx.AttrPath())
+}
+
+func (j *JsonQueryVisitorImpl) evaluateOperation(token antlr.Token, tree antlr.ParseTree) interface{} {
+	var apply func(Operand, Operand) (bool, error)
+	currentOp := j.currentOperation
+	switch token.GetTokenType() {
+	case JsonQueryParserEQ:
+		apply = currentOp.EQ
+	case JsonQueryParserNE:
+		apply = currentOp.NE
+	case JsonQueryParserGT:
+		apply = currentOp.GT
+	case JsonQueryParserLT:
+		apply = currentOp.LT
+	case JsonQueryParserLE:
+		apply = currentOp.LE
+	case JsonQueryParserGE:
+		apply = currentOp.GE
+	case JsonQueryParserCO:
+		apply = currentOp.CO
+	case JsonQueryParserSW:
+		apply = currentOp.SW
+	case JsonQueryParserEW:
+		apply = currentOp.EW
+	case JsonQueryParserIN:
+		apply = currentOp.IN
+	default:
+		j.setErr(fmt.Errorf("unknown operation %s", token.GetText()))
+		return false
+	}
+	defer func() { j.rightOp = nil }()
+	ret, err := apply(j.leftOp, j.rightOp)
+	if err != nil {
+		switch {
+		case errors.Is(err, ErrInvalidOperation):
+			// in case of invalid operation lets rather
+			// be conservative and return false because the rule doesn't even make
+			// sense. It can be argued that it would be false positive if we were
+			// to return true
+			j.setErr(err)
+			j.setDebugErr(
+				newNestedError(err, "Not a valid operation for datatypes").Set(ErrVals{
+					"operation":           token.GetTokenType(),
+					"object_path_operand": j.leftOp,
+					"rule_operand":        j.rightOp,
+				}),
+			)
+		case errors.Is(err, ErrEvalOperandMissing):
+			j.setDebugErr(
+				newNestedError(err, "Eval operand missing in input object").Set(ErrVals{
+					"attr_path": tree.GetText(),
+				}),
+			)
+		default:
+			var errInvalidOperand *ErrInvalidOperand
+			switch {
+			case errors.As(err, &errInvalidOperand):
+				j.setDebugErr(
+					newNestedError(err, "operands are not the right value type").Set(ErrVals{
+						"attr_path":           tree.GetText(),
+						"object_path_operand": j.leftOp,
+						"rule_operand":        j.rightOp,
+					}),
+				)
+			default:
+				j.setDebugErr(
+					newNestedError(err, "unknown error").Set(ErrVals{
+						"attr_path":           tree.GetText(),
+						"object_path_operand": j.leftOp,
+						"rule_operand":        j.rightOp,
+					}),
+				)
+			}
+		}
+
+		return false
+	}
+	return ret
 }
