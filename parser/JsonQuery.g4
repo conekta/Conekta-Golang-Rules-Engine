@@ -1,11 +1,12 @@
 grammar JsonQuery;
 
 query
-   : NOT? SP? '(' SP? query SP? ')'                                                                         #parenExp
-   | query SP LOGICAL_OPERATOR SP query                                                             #logicalExp
-   | attrPath SP 'pr'                                                                               #presentExp
-   | attrPath SP op=( EQ | NE | GT | LT | GE | LE | CO | SW | EW | IN ) SP value                    #compareExp
-   | (ASTERISK|PLUS|MINUS|DIVISON) SP '(' listAttrPaths ')' SP op=( EQ | NE | GT | LT | GE | LE ) SP value       #mulSumExp
+   : NOT? SP? '(' SP? query SP? ')'                                                                                 #parenExp
+   | query SP LOGICAL_OPERATOR SP query                                                                             #logicalExp
+   | attrPath SP 'pr'                                                                                               #presentExp
+   | attrPath SP op=( EQ | NE | GT | LT | GE | LE | CO | SW | EW | IN ) SP value                                    #compareExp
+   | attrPath SP op=( EQ | NE | GT | LT | GE | LE | CO | SW | EW | IN ) SP attrPathValue                            #compareExpAttrPath
+   | (ASTERISK|PLUS|MINUS|DIVISON) SP '(' listAttrPaths ')' SP op=( EQ | NE | GT | LT | GE | LE ) SP value          #mulSumExp
    ;
 
 NOT
@@ -34,6 +35,14 @@ LE : 'le' | 'LE' | '<=';
 CO : 'co' | 'CO';
 SW : 'sw' | 'SW';
 EW : 'ew' | 'EW';
+
+attrPathValue
+   : ATTRNAME subAttrValue?
+   ;
+
+subAttrValue
+   : '.' attrPathValue
+   ;
 
 attrPath
    : ATTRNAME subAttr?
