@@ -84,6 +84,8 @@ func (j *JsonQueryVisitorImpl) Visit(tree antlr.ParseTree) interface{} {
 		return val.Accept(j).(bool)
 	case *MulSumExpContext:
 		return val.Accept(j).(bool)
+	case *CompareExpAttrPathContext:
+		return val.Accept(j).(bool)
 	default:
 		j.setErr(errors.New("invalid rule"))
 		return false
@@ -250,6 +252,54 @@ func (j *JsonQueryVisitorImpl) VisitPresentExp(ctx *PresentExpContext) interface
 	return j.leftOp != nil
 }
 
+func (j *JsonQueryVisitorImpl) VisitCompareExpAttrPath(ctx *CompareExpAttrPathContext) interface{} {
+	ctx.AttrPath().Accept(j)
+	ctx.AttrPathValue().Accept(j)
+	var currentOp Operation
+	switch j.leftOp.(type) {
+	case string:
+		currentOp = &StringOperation{}
+	case int, int32, int64:
+		currentOp = &IntOperation{}
+	case float32, float64:
+		currentOp = &FloatOperation{}
+	default:
+		j.setErr(fmt.Errorf("invalid AttrPathValue"))
+	}
+	var apply func(Operand, Operand) (bool, error)
+	switch ctx.op.GetTokenType() {
+	case JsonQueryParserEQ:
+		apply = currentOp.EQ
+	case JsonQueryParserNE:
+		apply = currentOp.NE
+	case JsonQueryParserGT:
+		apply = currentOp.GT
+	case JsonQueryParserLT:
+		apply = currentOp.LT
+	case JsonQueryParserLE:
+		apply = currentOp.LE
+	case JsonQueryParserGE:
+		apply = currentOp.GE
+	case JsonQueryParserCO:
+		apply = currentOp.CO
+	case JsonQueryParserSW:
+		apply = currentOp.SW
+	case JsonQueryParserEW:
+		apply = currentOp.EW
+	case JsonQueryParserIN:
+		apply = currentOp.IN
+	default:
+		j.setErr(fmt.Errorf("unknown operation %s", ctx.op.GetText()))
+		return false
+	}
+	defer func() { j.rightOp = nil }()
+	ret, err := apply(j.leftOp, j.rightOp)
+	if err != nil {
+		j.setErr(err)
+	}
+	return ret
+}
+
 func (j *JsonQueryVisitorImpl) VisitCompareExp(ctx *CompareExpContext) interface{} {
 	ctx.AttrPath().Accept(j)
 	ctx.Value().Accept(j)
@@ -408,8 +458,41 @@ func (j *JsonQueryVisitorImpl) VisitAttrPath(ctx *AttrPathContext) interface{} {
 	return ctx.SubAttr().Accept(j)
 }
 
+func (j *JsonQueryVisitorImpl) VisitAttrPathValue(ctx *AttrPathValueContext) interface{} {
+	var item interface{}
+	if ctx.SubAttrValue() == nil || ctx.SubAttrValue().IsEmpty() {
+		if !j.stack.empty() {
+			item = j.stack.pop()
+		} else {
+			item = j.item
+		}
+		if item == nil {
+			return nil
+		}
+		m := item.(map[string]interface{})
+		j.rightOp = m[ctx.ATTRNAME().GetText()]
+		j.stack.clear()
+		return nil
+	}
+	if !j.stack.empty() {
+		item = j.stack.peek()
+	} else {
+		item = j.item
+	}
+	if item == nil {
+		return nil
+	}
+	m := item.(map[string]interface{})
+	j.stack.push(m[ctx.ATTRNAME().GetText()])
+	return ctx.SubAttrValue().Accept(j)
+}
+
 func (j *JsonQueryVisitorImpl) VisitSubAttr(ctx *SubAttrContext) interface{} {
 	return ctx.AttrPath().Accept(j)
+}
+
+func (j *JsonQueryVisitorImpl) VisitSubAttrValue(ctx *SubAttrValueContext) interface{} {
+	return ctx.AttrPathValue().Accept(j)
 }
 
 func (j *JsonQueryVisitorImpl) VisitBoolean(ctx *BooleanContext) interface{} {

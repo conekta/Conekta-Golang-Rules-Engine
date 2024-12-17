@@ -1,4 +1,4 @@
-// Code generated from JsonQuery.g4 by ANTLR 4.13.1. DO NOT EDIT.
+// Code generated from JsonQuery.g4 by ANTLR 4.13.2. DO NOT EDIT.
 
 package parser // JsonQuery
 
@@ -22,6 +22,15 @@ type JsonQueryVisitor interface {
 
 	// Visit a parse tree produced by JsonQueryParser#logicalExp.
 	VisitLogicalExp(ctx *LogicalExpContext) interface{}
+
+	// Visit a parse tree produced by JsonQueryParser#compareExpAttrPath.
+	VisitCompareExpAttrPath(ctx *CompareExpAttrPathContext) interface{}
+
+	// Visit a parse tree produced by JsonQueryParser#attrPathValue.
+	VisitAttrPathValue(ctx *AttrPathValueContext) interface{}
+
+	// Visit a parse tree produced by JsonQueryParser#subAttrValue.
+	VisitSubAttrValue(ctx *SubAttrValueContext) interface{}
 
 	// Visit a parse tree produced by JsonQueryParser#attrPath.
 	VisitAttrPath(ctx *AttrPathContext) interface{}

@@ -6,6 +6,19 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+func TestEvaluateAttrPathValue(t *testing.T) {
+	res, err := Evaluate(`x.c.d > x.c.e`, map[string]interface{}{
+		"x": map[string]interface{}{
+			"c": map[string]interface{}{
+				"d": 1.2,
+				"e": 1.1,
+			},
+		},
+	})
+	require.NoError(t, err)
+	require.True(t, res)
+}
+
 func TestEvaluateBasic(t *testing.T) {
 	res, err := Evaluate(`x.c.d eq "abc"`, map[string]interface{}{
 		"x": map[string]interface{}{
