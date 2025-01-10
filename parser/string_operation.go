@@ -22,7 +22,7 @@ func (o *StringOperation) getString(operand Operand) (string, error) {
 }
 
 func (o *StringOperation) get(left Operand, right Operand) (string, string, error) {
-	if left == nil {
+	if isNil(left) {
 		if o.config.NilToZeroValue {
 			left = ""
 		} else {

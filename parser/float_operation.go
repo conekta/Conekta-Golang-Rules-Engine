@@ -6,7 +6,7 @@ type FloatOperation struct {
 }
 
 func (o *FloatOperation) get(left Operand, right Operand) (float64, float64, error) {
-	if left == nil {
+	if isNil(left) {
 		if o.config.NilToZeroValue {
 			left = 0
 		} else {

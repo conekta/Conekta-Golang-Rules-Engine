@@ -6,7 +6,7 @@ type BoolOperation struct {
 }
 
 func (o *BoolOperation) get(left Operand, right Operand) (bool, bool, error) {
-	if left == nil {
+	if isNil(left) {
 		if o.config.NilToZeroValue {
 			left = false
 		} else {

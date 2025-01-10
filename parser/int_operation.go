@@ -6,7 +6,7 @@ type IntOperation struct {
 }
 
 func (o *IntOperation) get(left Operand, right Operand) (int, int, error) {
-	if left == nil {
+	if isNil(left) {
 		if o.config.NilToZeroValue {
 			left = 0
 		} else {
