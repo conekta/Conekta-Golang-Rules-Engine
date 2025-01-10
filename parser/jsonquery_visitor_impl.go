@@ -224,7 +224,7 @@ func (j *JsonQueryVisitorImpl) VisitCompareExpAttrPath(ctx *CompareExpAttrPathCo
 		return false
 	}
 	var currentOp Operation
-	switch j.leftOp.(type) {
+	switch j.rightOp.(type) {
 	case string:
 		currentOp = &StringOperation{BaseOperation: BaseOperation{config: j.config}}
 	case int, int32, int64:
@@ -232,17 +232,12 @@ func (j *JsonQueryVisitorImpl) VisitCompareExpAttrPath(ctx *CompareExpAttrPathCo
 	case float32, float64:
 		currentOp = &FloatOperation{BaseOperation: BaseOperation{config: j.config}}
 	default:
-		if isNil(j.leftOp) {
-			j.setDebugErr(
-				newNestedError(ErrEvalOperandMissing, "Eval operand missing in input object").Set(ErrVals{
-					"attr_path": ctx.AttrPath().GetText(),
-				}),
-			)
-			return false
-		} else {
-			j.setErr(fmt.Errorf("invalid AttrPathValue"))
-			return false
-		}
+		j.setDebugErr(
+			newNestedError(ErrInvalidOperation, "Eval operand invalid type").Set(ErrVals{
+				"attr_path": ctx.AttrPathValue().GetText(),
+			}),
+		)
+		return false
 	}
 	var apply func(Operand, Operand) (bool, error)
 	switch ctx.op.GetTokenType() {
@@ -387,6 +382,7 @@ func (j *JsonQueryVisitorImpl) VisitAttrPath(ctx *AttrPathContext) interface{} {
 		item = j.item
 	}
 	if isNil(item) {
+		j.stack.clear()
 		return nil
 	}
 	m := item.(map[string]interface{})
@@ -416,6 +412,7 @@ func (j *JsonQueryVisitorImpl) VisitAttrPathValue(ctx *AttrPathValueContext) int
 		item = j.item
 	}
 	if isNil(item) {
+		j.stack.clear()
 		return nil
 	}
 	m := item.(map[string]interface{})
