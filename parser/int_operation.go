@@ -7,11 +7,10 @@ type IntOperation struct {
 
 func (o *IntOperation) get(left Operand, right Operand) (int, int, error) {
 	if isNil(left) {
-		if o.config.NilToZeroValue {
-			left = 0
-		} else {
+		if !o.config.NilToZeroValue {
 			return 0, 0, ErrEvalOperandMissing
 		}
+		left = 0
 	}
 	leftVal, err := toInt(left)
 	if err != nil {

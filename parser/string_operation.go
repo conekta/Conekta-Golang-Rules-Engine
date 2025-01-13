@@ -23,11 +23,10 @@ func (o *StringOperation) getString(operand Operand) (string, error) {
 
 func (o *StringOperation) get(left Operand, right Operand) (string, string, error) {
 	if isNil(left) {
-		if o.config.NilToZeroValue {
-			left = ""
-		} else {
+		if !o.config.NilToZeroValue {
 			return "", "", ErrEvalOperandMissing
 		}
+		left = ""
 	}
 	leftVal, err := o.getString(left)
 	if err != nil {

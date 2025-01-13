@@ -7,11 +7,10 @@ type BoolOperation struct {
 
 func (o *BoolOperation) get(left Operand, right Operand) (bool, bool, error) {
 	if isNil(left) {
-		if o.config.NilToZeroValue {
-			left = false
-		} else {
+		if !o.config.NilToZeroValue {
 			return false, false, ErrEvalOperandMissing
 		}
+		left = false
 	}
 	leftVal, ok := left.(bool)
 	if !ok {

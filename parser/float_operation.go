@@ -7,11 +7,10 @@ type FloatOperation struct {
 
 func (o *FloatOperation) get(left Operand, right Operand) (float64, float64, error) {
 	if isNil(left) {
-		if o.config.NilToZeroValue {
-			left = 0
-		} else {
+		if !o.config.NilToZeroValue {
 			return 0, 0, ErrEvalOperandMissing
 		}
+		left = 0
 	}
 	leftVal, err := toFloat(left)
 	if err != nil {
