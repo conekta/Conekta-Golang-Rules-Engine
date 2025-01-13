@@ -5,10 +5,17 @@ import (
 )
 
 type VersionOperation struct {
+	BaseOperation
 	NullOperation
 }
 
 func (v *VersionOperation) get(left Operand, right Operand) (semver.Version, semver.Version, error) {
+	if isNil(left) {
+		if !v.config.NilToZeroValue {
+			return semver.Version{}, semver.Version{}, ErrEvalOperandMissing
+		}
+		left = ""
+	}
 	var leftVer, rightVer semver.Version
 	leftVal, ok := left.(string)
 	if !ok {
