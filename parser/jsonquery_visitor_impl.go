@@ -319,8 +319,7 @@ func (j *JsonQueryVisitorImpl) VisitListAttrPaths(ctx *ListAttrPathsContext) int
 }
 
 func (j *JsonQueryVisitorImpl) VisitSubListOfAttrPaths(ctx *SubListOfAttrPathsContext) interface{} {
-
-	if j.leftOp == nil {
+	if isNil(j.leftOp) {
 		j.leftOp = make([]float64, 0)
 	}
 	list, ok := j.leftOp.([]float64)
@@ -328,7 +327,6 @@ func (j *JsonQueryVisitorImpl) VisitSubListOfAttrPaths(ctx *SubListOfAttrPathsCo
 		j.leftOp = make([]float64, 0)
 	}
 	for _, attribute := range strings.Split(ctx.GetText(), ",") {
-
 		if strings.Contains(attribute, ".") {
 			val, _ := NestedMapLookup(j.item, strings.Split(attribute, ".")...)
 			list = append(list, ToFloat64(val))
@@ -369,6 +367,7 @@ func (j *JsonQueryVisitorImpl) VisitAttrPath(ctx *AttrPathContext) interface{} {
 			item = j.item
 		}
 		if isNil(item) {
+			j.leftOp = nil
 			return nil
 		}
 		m := item.(map[string]interface{})
@@ -382,6 +381,7 @@ func (j *JsonQueryVisitorImpl) VisitAttrPath(ctx *AttrPathContext) interface{} {
 		item = j.item
 	}
 	if isNil(item) {
+		j.leftOp = nil
 		j.stack.clear()
 		return nil
 	}
@@ -399,6 +399,7 @@ func (j *JsonQueryVisitorImpl) VisitAttrPathValue(ctx *AttrPathValueContext) int
 			item = j.item
 		}
 		if isNil(item) {
+			j.rightOp = nil
 			return nil
 		}
 		m := item.(map[string]interface{})
@@ -412,6 +413,7 @@ func (j *JsonQueryVisitorImpl) VisitAttrPathValue(ctx *AttrPathValueContext) int
 		item = j.item
 	}
 	if isNil(item) {
+		j.rightOp = nil
 		j.stack.clear()
 		return nil
 	}
@@ -500,7 +502,7 @@ func (j *JsonQueryVisitorImpl) VisitListInts(ctx *ListIntsContext) interface{} {
 }
 
 func (j *JsonQueryVisitorImpl) VisitSubListOfInts(ctx *SubListOfIntsContext) interface{} {
-	if j.rightOp == nil {
+	if isNil(j.rightOp) {
 		j.rightOp = make([]int, 0)
 	}
 	list := j.rightOp.([]int)
@@ -526,7 +528,7 @@ func (j *JsonQueryVisitorImpl) VisitListDoubles(ctx *ListDoublesContext) interfa
 }
 
 func (j *JsonQueryVisitorImpl) VisitSubListOfDoubles(ctx *SubListOfDoublesContext) interface{} {
-	if j.rightOp == nil {
+	if isNil(j.rightOp) {
 		j.rightOp = make([]float64, 0)
 	}
 	list := j.rightOp.([]float64)
@@ -552,7 +554,7 @@ func (j *JsonQueryVisitorImpl) VisitListStrings(ctx *ListStringsContext) interfa
 }
 
 func (j *JsonQueryVisitorImpl) VisitSubListOfStrings(ctx *SubListOfStringsContext) interface{} {
-	if j.rightOp == nil {
+	if isNil(j.rightOp) {
 		j.rightOp = make([]string, 0)
 	}
 	val := getString(ctx.STRING().GetText())
