@@ -69,6 +69,12 @@ func (o *FloatOperation) LE(left Operand, right Operand) (bool, error) {
 }
 
 func (o *FloatOperation) IN(left Operand, right Operand) (bool, error) {
+	if isNil(left) {
+		if !o.config.NilToZeroValue {
+			return false, ErrEvalOperandMissing
+		}
+		left = 0
+	}
 	leftVal, err := toFloat(left)
 	if err != nil {
 		return false, err
@@ -89,14 +95,39 @@ func ToFloat64(unk interface{}) float64 {
 	switch i := unk.(type) {
 	case float64:
 		return i
+	case *float64:
+		if i == nil {
+			return 0
+		}
+		return *i
 	case float32:
 		return float64(i)
+	case *float32:
+		if i == nil {
+			return 0
+		}
+		return float64(*i)
 	case int64:
 		return float64(i)
+	case *int64:
+		if i == nil {
+			return 0
+		}
+		return float64(*i)
 	case int:
 		return float64(i)
+	case *int:
+		if i == nil {
+			return 0
+		}
+		return float64(*i)
 	case int32:
 		return float64(i)
+	case *int32:
+		if i == nil {
+			return 0
+		}
+		return float64(*i)
 	default:
 		return 0
 	}
