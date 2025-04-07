@@ -10,8 +10,18 @@ func toFloat(op Operand) (float64, error) {
 	switch val := op.(type) {
 	case int:
 		return float64(val), nil
+	case *int:
+		if val == nil {
+			return 0, nil
+		}
+		return float64(*val), nil
 	case float64:
 		return val, nil
+	case *float64:
+		if val == nil {
+			return 0, nil
+		}
+		return *val, nil
 	}
 	var exp float64
 	return 0, newErrInvalidOperand(op, exp)
@@ -21,12 +31,32 @@ func toInt(op Operand) (int, error) {
 	switch val := op.(type) {
 	case int:
 		return val, nil
+	case *int:
+		if val == nil {
+			return 0, nil
+		}
+		return *val, nil
 	case float64:
 		return int(val), nil
+	case *float64:
+		if val == nil {
+			return 0, nil
+		}
+		return int(*val), nil
 	case int32:
 		return int(val), nil
+	case *int32:
+		if val == nil {
+			return 0, nil
+		}
+		return int(*val), nil
 	case int64:
 		return int(val), nil
+	case *int64:
+		if val == nil {
+			return 0, nil
+		}
+		return int(*val), nil
 	}
 	var exp int
 	return 0, newErrInvalidOperand(op, exp)
