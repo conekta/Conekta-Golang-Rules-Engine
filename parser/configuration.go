@@ -3,11 +3,11 @@ package parser
 type EvaluatorConfigOption func(*EvaluatorConfig)
 
 type EvaluatorConfig struct {
-	NilToZeroValue bool
+	attrPathsPrefixNilToZeroValue []string
 }
 
-func WithNilToZeroValue() EvaluatorConfigOption {
+func WithAttrPathsPrefixNilToZeroValue(attrPathPrefix ...string) EvaluatorConfigOption {
 	return func(e *EvaluatorConfig) {
-		e.NilToZeroValue = true
+		e.attrPathsPrefixNilToZeroValue = attrPathPrefix
 	}
 }

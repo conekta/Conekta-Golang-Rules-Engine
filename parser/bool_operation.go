@@ -7,7 +7,7 @@ type BoolOperation struct {
 
 func (o *BoolOperation) get(left Operand, right Operand) (bool, bool, error) {
 	if isNil(left) {
-		if !o.config.NilToZeroValue {
+		if !o.NilToZeroValue() {
 			return false, false, ErrEvalOperandMissing
 		}
 		left = false
