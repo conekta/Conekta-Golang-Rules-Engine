@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"reflect"
+	"strings"
 )
 
 func toFloat(op Operand) (float64, error) {
@@ -90,7 +91,21 @@ func (e *ErrInvalidOperand) Error() string {
 }
 
 type BaseOperation struct {
-	config EvaluatorConfig
+	config   EvaluatorConfig
+	attrPath string
+}
+
+func (b *BaseOperation) NilToZeroValue() bool {
+	for _, prefix := range b.config.attrPathsPrefixNilToZeroValue {
+		if strings.HasPrefix(b.attrPath, prefix) {
+			return true
+		}
+	}
+	return false
+}
+
+func (b *BaseOperation) AttrPath(path string) {
+	b.attrPath = path
 }
 
 type Operation interface {
@@ -104,4 +119,5 @@ type Operation interface {
 	SW(left Operand, right Operand) (bool, error)
 	EW(left Operand, right Operand) (bool, error)
 	IN(left Operand, right Operand) (bool, error)
+	AttrPath(path string)
 }

@@ -182,6 +182,7 @@ func (j *JsonQueryVisitorImpl) VisitMulSumExp(ctx *MulSumExpContext) interface{}
 	}
 	var apply func(Operand, Operand) (bool, error)
 	currentOp := j.currentOperation
+	currentOp.AttrPath(ctx.ListAttrPaths().GetText())
 	switch ctx.op.GetTokenType() {
 	case JsonQueryParserEQ:
 		apply = currentOp.EQ
@@ -239,6 +240,7 @@ func (j *JsonQueryVisitorImpl) VisitCompareExpAttrPath(ctx *CompareExpAttrPathCo
 		)
 		return false
 	}
+	currentOp.AttrPath(ctx.AttrPath().GetText())
 	var apply func(Operand, Operand) (bool, error)
 	switch ctx.op.GetTokenType() {
 	case JsonQueryParserEQ:
@@ -281,6 +283,7 @@ func (j *JsonQueryVisitorImpl) VisitCompareExp(ctx *CompareExpContext) interface
 	}
 	var apply func(Operand, Operand) (bool, error)
 	currentOp := j.currentOperation
+	currentOp.AttrPath(ctx.AttrPath().GetText())
 	switch ctx.op.GetTokenType() {
 	case JsonQueryParserEQ:
 		apply = currentOp.EQ
@@ -358,6 +361,7 @@ func NestedMapLookup(m map[string]interface{}, ks ...string) (rval interface{}, 
 		return NestedMapLookup(m, ks[1:]...)
 	}
 }
+
 func (j *JsonQueryVisitorImpl) VisitAttrPath(ctx *AttrPathContext) interface{} {
 	var item interface{}
 	if ctx.SubAttr() == nil || ctx.SubAttr().IsEmpty() {
@@ -432,7 +436,6 @@ func (j *JsonQueryVisitorImpl) VisitSubAttrValue(ctx *SubAttrValueContext) inter
 
 func (j *JsonQueryVisitorImpl) VisitBoolean(ctx *BooleanContext) interface{} {
 	j.currentOperation = &BoolOperation{BaseOperation: BaseOperation{config: j.config}}
-
 	val, err := strconv.ParseBool(ctx.GetText())
 	if err != nil {
 		j.rightOp = nil

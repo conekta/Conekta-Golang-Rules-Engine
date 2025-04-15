@@ -7,7 +7,7 @@ type IntOperation struct {
 
 func (o *IntOperation) get(left Operand, right Operand) (int, int, error) {
 	if isNil(left) {
-		if !o.config.NilToZeroValue {
+		if !o.NilToZeroValue() {
 			return 0, 0, ErrEvalOperandMissing
 		}
 		left = 0

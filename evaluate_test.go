@@ -74,7 +74,7 @@ func TestEvaluateMissingFieldWithNilToZeroValue(t *testing.T) {
 				"d": "abc",
 			},
 		},
-	}, parser.WithNilToZeroValue())
+	}, parser.WithAttrPathsPrefixNilToZeroValue("x.c.e"))
 	var nestedError *parser.NestedError
 	if errors.As(err, &nestedError) &&
 		!errors.Is(nestedError.Err, parser.ErrEvalOperandMissing) {

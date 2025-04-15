@@ -7,7 +7,7 @@ type FloatOperation struct {
 
 func (o *FloatOperation) get(left Operand, right Operand) (float64, float64, error) {
 	if isNil(left) {
-		if !o.config.NilToZeroValue {
+		if !o.NilToZeroValue() {
 			return 0, 0, ErrEvalOperandMissing
 		}
 		left = 0
@@ -70,7 +70,7 @@ func (o *FloatOperation) LE(left Operand, right Operand) (bool, error) {
 
 func (o *FloatOperation) IN(left Operand, right Operand) (bool, error) {
 	if isNil(left) {
-		if !o.config.NilToZeroValue {
+		if !o.NilToZeroValue() {
 			return false, ErrEvalOperandMissing
 		}
 		left = 0
