@@ -372,6 +372,7 @@ func (j *JsonQueryVisitorImpl) VisitAttrPath(ctx *AttrPathContext) interface{} {
 		}
 		if isNil(item) {
 			j.leftOp = nil
+			j.stack.clear()
 			return nil
 		}
 		m := item.(map[string]interface{})
@@ -404,6 +405,7 @@ func (j *JsonQueryVisitorImpl) VisitAttrPathValue(ctx *AttrPathValueContext) int
 		}
 		if isNil(item) {
 			j.rightOp = nil
+			j.stack.clear()
 			return nil
 		}
 		m := item.(map[string]interface{})

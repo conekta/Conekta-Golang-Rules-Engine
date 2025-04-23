@@ -73,9 +73,15 @@ func (o *IntOperation) LE(left Operand, right Operand) (bool, error) {
 }
 
 func (o *IntOperation) IN(left Operand, right Operand) (bool, error) {
-	leftVal, ok := left.(int)
-	if !ok {
-		return false, newErrInvalidOperand(left, leftVal)
+	if isNil(left) {
+		if !o.NilToZeroValue() {
+			return false, ErrEvalOperandMissing
+		}
+		left = 0
+	}
+	leftVal, err := toInt(left)
+	if err != nil {
+		return false, err
 	}
 	rightVal, ok := right.([]int)
 	if !ok {
