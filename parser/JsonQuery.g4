@@ -1,12 +1,12 @@
 grammar JsonQuery;
 
 query
-   : NOT? SP? '(' SP? query SP? ')'                                                                                 #parenExp
-   | query SP LOGICAL_OPERATOR SP query                                                                             #logicalExp
-   | attrPath SP 'pr'                                                                                               #presentExp
-   | attrPath SP op=( EQ | NE | GT | LT | GE | LE | CO | SW | EW | IN ) SP value                                    #compareExp
-   | attrPath SP op=( EQ | NE | GT | LT | GE | LE | CO | SW | EW | IN ) SP attrPathValue                            #compareExpAttrPath
-   | (ASTERISK|PLUS|MINUS|DIVISON) SP '(' listAttrPaths ')' SP op=( EQ | NE | GT | LT | GE | LE ) SP value          #mulSumExp
+   : NOT? '(' query ')'                                                                                 #parenExp
+   | query LOGICAL_OPERATOR query                                                                             #logicalExp
+   | attrPath 'pr'                                                                                               #presentExp
+   | attrPath op=( EQ | NE | GT | LT | GE | LE | CO | SW | EW | IN ) value                                    #compareExp
+   | attrPath op=( EQ | NE | GT | LT | GE | LE | CO | SW | EW | IN ) attrPathValue                            #compareExpAttrPath
+   | (ASTERISK|PLUS|MINUS|DIVISON) '(' listAttrPaths ')' op=( EQ | NE | GT | LT | GE | LE ) value          #mulSumExp
    ;
 
 NOT
@@ -93,12 +93,8 @@ STRING
    ;
 
 listStrings
-   : '[' subListOfStrings
+   : '[' STRING (COMMA STRING)* ']'
    ;
-
-subListOfStrings
-   : STRING COMMA subListOfStrings
-   | STRING ']';
 
 fragment ESC
    : '\\' (["\\/bfnrt] | UNICODE)
@@ -117,29 +113,16 @@ DOUBLE
    ;
 
 listDoubles
-   : '[' subListOfDoubles
+   : '[' DOUBLE (COMMA DOUBLE)* ']'
    ;
-
-subListOfDoubles
-   : DOUBLE COMMA subListOfDoubles
-   | DOUBLE ']';
 
 listAttrPaths
-   :  subListOfAttrPaths
+   : attrPath (COMMA attrPath)*
    ;
-
-subListOfAttrPaths
-   : attrPath COMMA subListOfAttrPaths
-   | attrPath ;
-
 
 listInts
-   : '[' subListOfInts
+   : '[' INT (COMMA INT)* ']'
    ;
-
-subListOfInts
-   : INT COMMA subListOfInts
-   | INT ']';
 
 // INT no leading zeros.
 INT
@@ -151,11 +134,9 @@ EXP
    : [Ee] [+\-]? INT
    ;
 
-NEWLINE
-   : '\n' ;
-
 COMMA
-   : ',' ' '*;
-SP
-   : ' ' NEWLINE*
+   : ',' ;
+
+WS
+   : [ \t\r\n]+ -> skip
    ;
