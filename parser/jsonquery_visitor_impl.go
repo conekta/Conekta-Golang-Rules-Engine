@@ -318,10 +318,6 @@ func (j *JsonQueryVisitorImpl) VisitCompareExp(ctx *CompareExpContext) interface
 }
 
 func (j *JsonQueryVisitorImpl) VisitListAttrPaths(ctx *ListAttrPathsContext) interface{} {
-	return ctx.SubListOfAttrPaths().Accept(j)
-}
-
-func (j *JsonQueryVisitorImpl) VisitSubListOfAttrPaths(ctx *SubListOfAttrPathsContext) interface{} {
 	if isNil(j.leftOp) {
 		j.leftOp = make([]float64, 0)
 	}
@@ -503,24 +499,20 @@ func (j *JsonQueryVisitorImpl) VisitListOfInts(ctx *ListOfIntsContext) interface
 }
 
 func (j *JsonQueryVisitorImpl) VisitListInts(ctx *ListIntsContext) interface{} {
-	return ctx.SubListOfInts().Accept(j)
-}
-
-func (j *JsonQueryVisitorImpl) VisitSubListOfInts(ctx *SubListOfIntsContext) interface{} {
 	if isNil(j.rightOp) {
 		j.rightOp = make([]int, 0)
 	}
 	list := j.rightOp.([]int)
-	val, err := strconv.ParseInt(ctx.INT().GetText(), 10, 64)
-	if err != nil {
-		j.setErr(err)
-		return nil
+	for _, node := range ctx.AllINT() {
+		val, err := strconv.ParseInt(node.GetText(), 10, 64)
+		if err != nil {
+			j.setErr(err)
+			return nil
+		}
+		list = append(list, int(val))
 	}
-	j.rightOp = append(list, int(val))
-	if ctx.SubListOfInts() == nil || ctx.SubListOfInts().IsEmpty() {
-		return nil
-	}
-	return ctx.SubListOfInts().Accept(j)
+	j.rightOp = list
+	return nil
 }
 
 func (j *JsonQueryVisitorImpl) VisitListOfDoubles(ctx *ListOfDoublesContext) interface{} {
@@ -529,24 +521,20 @@ func (j *JsonQueryVisitorImpl) VisitListOfDoubles(ctx *ListOfDoublesContext) int
 }
 
 func (j *JsonQueryVisitorImpl) VisitListDoubles(ctx *ListDoublesContext) interface{} {
-	return ctx.SubListOfDoubles().Accept(j)
-}
-
-func (j *JsonQueryVisitorImpl) VisitSubListOfDoubles(ctx *SubListOfDoublesContext) interface{} {
 	if isNil(j.rightOp) {
 		j.rightOp = make([]float64, 0)
 	}
 	list := j.rightOp.([]float64)
-	val, err := strconv.ParseFloat(ctx.DOUBLE().GetText(), 10)
-	if err != nil {
-		j.setErr(err)
-		return nil
+	for _, node := range ctx.AllDOUBLE() {
+		val, err := strconv.ParseFloat(node.GetText(), 10)
+		if err != nil {
+			j.setErr(err)
+			return nil
+		}
+		list = append(list, val)
 	}
-	j.rightOp = append(list, val)
-	if ctx.SubListOfDoubles() == nil || ctx.SubListOfDoubles().IsEmpty() {
-		return nil
-	}
-	return ctx.SubListOfDoubles().Accept(j)
+	j.rightOp = list
+	return nil
 }
 
 func (j *JsonQueryVisitorImpl) VisitListOfStrings(ctx *ListOfStringsContext) interface{} {
@@ -555,20 +543,15 @@ func (j *JsonQueryVisitorImpl) VisitListOfStrings(ctx *ListOfStringsContext) int
 }
 
 func (j *JsonQueryVisitorImpl) VisitListStrings(ctx *ListStringsContext) interface{} {
-	return ctx.SubListOfStrings().Accept(j)
-}
-
-func (j *JsonQueryVisitorImpl) VisitSubListOfStrings(ctx *SubListOfStringsContext) interface{} {
 	if isNil(j.rightOp) {
 		j.rightOp = make([]string, 0)
 	}
-	val := getString(ctx.STRING().GetText())
 	list := j.rightOp.([]string)
-	j.rightOp = append(list, val)
-	if ctx.SubListOfStrings() == nil || ctx.SubListOfStrings().IsEmpty() {
-		return nil
+	for _, node := range ctx.AllSTRING() {
+		list = append(list, getString(node.GetText()))
 	}
-	return ctx.SubListOfStrings().Accept(j)
+	j.rightOp = list
+	return nil
 }
 
 func (j *JsonQueryVisitorImpl) handleApplyError(err error, attrPath string, tokenType int) {
